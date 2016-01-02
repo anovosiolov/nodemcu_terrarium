@@ -37,21 +37,23 @@ end
 function check_hum ()
   local status,temp,hum = dht.readxx(dhtpin)
   -- dir = read_watch()
-  gpio.mode(fogpin, gpio.OUTPUT)
-  if (hum >= max) or (load_state(50) == 1 and hum >= med) then
-    gpio.write(fogpin, gpio.HIGH) -- turn off
-    save_state(fogpin, gpio.HIGH)
-    save_state(50, 0)
-    -- set_watch(0)
+  if (status == dht.OK) then
+    gpio.mode(fogpin, gpio.OUTPUT)
+    if (hum >= max) or (load_state(50) == 1 and hum >= med) then
+      gpio.write(fogpin, gpio.HIGH) -- turn off
+      save_state(fogpin, gpio.HIGH)
+      save_state(50, 0)
+      -- set_watch(0)
+    end
+    if hum <= min then
+      gpio.write(fogpin, gpio.LOW) -- turn on
+      save_state(fogpin, gpio.LOW)
+      save_state(50, 1)
+      -- set_watch(1)
+    end
+    -- print(dir)
+    print(hum)
   end
-  if hum <= min then
-    gpio.write(fogpin, gpio.LOW) -- turn on
-    save_state(fogpin, gpio.LOW)
-    save_state(50, 1)
-    -- set_watch(1)
-  end
-  -- print(dir)
-  print(hum)
 end
 
 load_state(fogpin)
