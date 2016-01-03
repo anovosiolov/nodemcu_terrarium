@@ -4,7 +4,7 @@ lightpin = 2
 min = 40
 med = 50
 max = 80
-interval = 30000
+interval = 27123
 
 function load_state(pin)
   if pin < 50 then
