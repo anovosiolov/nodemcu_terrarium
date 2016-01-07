@@ -25,3 +25,11 @@ Server responds on
 *   `/lightoff` - switches pin 2 off
 
 Connection settings are in set in `wifi.lua`.
+
+## Notes
+
+flash rom
+
+```shell
+sudo ./esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash 0x00000 rom.bin
+```
