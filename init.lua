@@ -1,5 +1,7 @@
 dofile('wifi.lua')
 
+files = file.list()
+
 if (files['server.lc'] == nil) then node.compile('server.lua') end
 if (files['dht.lc'] == nil) then node.compile('dht.lua') end
 if (files['watcher.lc'] == nil) then node.compile('watcher.lua') end
