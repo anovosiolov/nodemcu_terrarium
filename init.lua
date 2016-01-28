@@ -1,11 +1,8 @@
 dofile('wifi.lua')
 
-file.remove('server.lc')
-file.remove('dht.lc')
-file.remove('watcher.lc')
-node.compile('server.lua')
-node.compile('dht.lua')
-node.compile('watcher.lua')
+if (files['server.lc'] == nil) then node.compile('server.lua') end
+if (files['dht.lc'] == nil) then node.compile('dht.lua') end
+if (files['watcher.lc'] == nil) then node.compile('watcher.lua') end
 
 tmr.alarm(1,1000, 0, function()
   if wifi.sta.status() == 5 then

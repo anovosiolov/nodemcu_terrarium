@@ -28,6 +28,8 @@ Connection settings are in set in `wifi.lua`.
 
 ## Notes
 
+*   rename  `wifi.lua.default` to `wifi.lua`
+
 flash rom
 
 ```shell
