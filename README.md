@@ -23,6 +23,8 @@ Server responds on
 *   `/fogoff` - turns pin 1 off
 *   `/lighton` - switches pin 2 on
 *   `/lightoff` - switches pin 2 off
+*   `/lighten` - enable light
+*   `/lightdis` - disable light
 
 Connection settings are in set in `wifi.lua`.
 
