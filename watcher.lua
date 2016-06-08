@@ -1,5 +1,3 @@
-
-
 function load_state(pin)
   if pin < 50 then
     gpio.mode(pin, gpio.OUTPUT)
@@ -27,19 +25,19 @@ function save_state(pin, state)
   file.close()
 end
 
-
-function check_hum ()
+function check_hum()
   local status,temp,hum = dht.readxx(dhtpin)
   -- dir = read_watch()
   if (status == dht.OK) then
-    gpio.mode(FOGPIN, gpio.OUTPUT)
     if (hum >= MAX) or (load_state(50) == 1 and hum >= MED) then
+      gpio.mode(FOGPIN, gpio.OUTPUT)
       gpio.write(FOGPIN, gpio.HIGH) -- turn off
       save_state(FOGPIN, gpio.HIGH)
       save_state(50, 0)
       -- set_watch(0)
     end
     if hum <= MIN then
+      gpio.mode(FOGPIN, gpio.OUTPUT)
       gpio.write(FOGPIN, gpio.LOW) -- turn on
       save_state(FOGPIN, gpio.LOW)
       save_state(50, 1)
@@ -50,7 +48,25 @@ function check_hum ()
   end
 end
 
+function check_temp()
+  local status,temp,hum = dht.readxx(dhtpin)
+  if (status == dht.OK) then
+    if temp < MINTEMP and light_off then
+      light_set(gpio.LOW) -- turn on light
+      save_state(LIGHTPIN, gpio.LOW)
+    elseif temp > MAXTEMP and light_on then
+      light_set(gpio.HIGH) -- turn on light
+      save_state(LIGHTPIN, gpio.HIGH)
+    end
+  end
+end
+
+function check_all()
+  check_hum()
+  check_temp()
+end
+
 load_state(FOGPIN)
 load_state(LIGHTPIN)
-check_hum()
-tmr.alarm(0, INTERVAL, 1, check_hum)
+check_all()
+tmr.alarm(0, INTERVAL, 1, check_all)
