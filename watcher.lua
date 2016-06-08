@@ -26,7 +26,7 @@ function save_state(pin, state)
 end
 
 function check_hum()
-  local status,temp,hum = dht.readxx(dhtpin)
+  local status,temp,hum = dht.readxx(DHTPIN)
   -- dir = read_watch()
   if (status == dht.OK) then
     if (hum >= MAX) or (load_state(50) == 1 and hum >= MED) then
@@ -49,7 +49,7 @@ function check_hum()
 end
 
 function check_temp()
-  local status,temp,hum = dht.readxx(dhtpin)
+  local status,temp,hum = dht.readxx(DHTPIN)
   if (status == dht.OK) then
     if temp < MINTEMP and light_off then
       light_set(gpio.LOW) -- turn on light

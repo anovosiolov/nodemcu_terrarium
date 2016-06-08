@@ -4,7 +4,7 @@ if (files['server.lc'] == nil) then node.compile('server.lua') end
 if (files['dht.lc'] == nil) then node.compile('dht.lua') end
 if (files['watcher.lc'] == nil) then node.compile('watcher.lua') end
 
-DHTPIN= 7
+DHTPIN = 7
 MIN = 40
 MED = 50
 MAX = 80
