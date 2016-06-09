@@ -27,25 +27,6 @@ function get_metrics ()
   return d
 end
 
-function save_state(pin, state)
-  file.open('pin_'..pin, 'w+')
-  file.writeline(state)
-  file.close()
-end
-
-function lightset(i)
-  if light_enabled or i == gpio.HIGH then
-    gpio.mode(LIGHTPIN, gpio.OUTPUT)
-    gpio.write(LIGHTPIN, i)
-    save_state(LIGHTPIN, i)
-    if i == gpio.LOW then
-      light_on = 1 -- turned on
-    else
-      light_on = 0 -- turned off
-    end
-  end
-end
-
 -- create a server
 -- 30s time out for a inactive client
 sv=net.createServer(net.TCP, 30)
@@ -97,11 +78,13 @@ sv:listen(80,function(conn)
       print("Light off")
       client:send("Light off. OK")
     elseif string.match(pl, "lighten") then
-      light_enabled = true
+      light_enabled = 1
+      save_state(LIGHT_ENABLED, 1)
       print("Light enabled")
       client:send("Light enable. OK")
     elseif string.match(pl, "lightdis") then
-      light_enabled = false
+      light_enabled = 0
+      save_state(LIGHT_ENABLED, 0)
       print("Light disabled")
       client:send("Light disable. OK")
     else
