@@ -13,8 +13,8 @@ MAXTEMP = 28
 INTERVAL = 28*1000
 FOGPIN = 2
 LIGHTPIN = 1
-light_enabled = false
-light_on = false
+light_enabled = 0
+light_on = 0
 
 wifi.sta.eventMonReg(wifi.STA_GOTIP, function()
   wifi.sta.eventMonStop("unreg all")

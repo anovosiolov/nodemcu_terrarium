@@ -39,9 +39,9 @@ function lightset(i)
     gpio.write(LIGHTPIN, i)
     save_state(LIGHTPIN, i)
     if i == gpio.LOW then
-      light_on = true -- turn on
+      light_on = 1 -- turned on
     else
-      light_on = false -- turn off
+      light_on = 0 -- turned off
     end
   end
 end
