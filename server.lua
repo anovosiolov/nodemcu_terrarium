@@ -101,6 +101,7 @@ sv:listen(80,function(conn)
       print("Light enabled")
       client:send("Light enable. OK")
     elseif string.match(pl, "lightdis") then
+      lightset(gpio.HIGH)
       light_enabled = false
       print("Light disabled")
       client:send("Light disable. OK")
