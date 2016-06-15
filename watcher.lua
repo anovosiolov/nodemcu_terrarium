@@ -27,6 +27,17 @@ function save_state(pin, state)
   file.close()
 end
 
+function lightset(i)
+  gpio.mode(LIGHTPIN, gpio.OUTPUT)
+  gpio.write(LIGHTPIN, i)
+  save_state(LIGHTPIN, i)
+  if i == gpio.LOW then
+    light_on = 1 -- turned on
+  else
+    light_on = 0 -- turned off
+  end
+end
+
 function check_hum()
   if (hum >= MAX) or (load_state(50) == 1 and hum >= MED) then
     gpio.mode(FOGPIN, gpio.OUTPUT)
@@ -45,11 +56,11 @@ function check_hum()
 end
 
 function check_temp()
-  if temp < MINTEMP and light_on == 0 then
-    light_set(gpio.LOW) -- turn on light
+  if ((temp < MINTEMP) and (light_on == 0) and (light_enabled == 1)) then
+    lightset(gpio.LOW) -- turn on light
     save_state(LIGHTPIN, gpio.LOW)
   elseif temp > MAXTEMP and light_on == 1 then
-    light_set(gpio.HIGH) -- turn on light
+    lightset(gpio.HIGH) -- turn on light
     save_state(LIGHTPIN, gpio.HIGH)
   end
 end
@@ -64,5 +75,6 @@ end
 
 load_state(FOGPIN)
 load_state(LIGHTPIN)
+light_enabled = load_state(LIGHT_ENABLED)
 check_all()
 tmr.alarm(0, INTERVAL, 1, check_all)

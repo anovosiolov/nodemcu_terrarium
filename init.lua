@@ -13,6 +13,7 @@ MAXTEMP = 29
 INTERVAL = 28*1000
 FOGPIN = 2
 LIGHTPIN = 1
+LIGHT_ENABLED = 52
 light_enabled = 0
 light_on = 0
 
