@@ -19,12 +19,14 @@ pin 2 is light control (not implemented auto switch).
 Server responds on
 
 *   `/metrics` - shows metrics for collecting by prometheus
-*   `/forgon` - switches pin 1 on
-*   `/fogoff` - turns pin 1 off
+*   `/uvon` - switches pin 1 on
+*   `/uvoff` - switches pin 1 off
 *   `/lighton` - switches pin 2 on
 *   `/lightoff` - switches pin 2 off
 *   `/lighten` - enable light
 *   `/lightdis` - disable light
+*   `/forgon` - switches pin 4 on
+*   `/fogoff` - turns pin 4 off
 
 Connection settings are in set in `wifi.lua`.
 

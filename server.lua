@@ -70,6 +70,14 @@ sv:listen(80,function(conn)
       save_state('fog', 0)
       print("Fog off")
       client:send("Fog off. OK")
+    elseif string.match(pl, "uvon") then
+      uvset(gpio.LOW)
+      print("UV on")
+      client:send("UV on. OK")
+    elseif string.match(pl, "uvoff") then
+      uvset(gpio.HIGH)
+      print("UV off")
+      client:send("UV off. OK")
     elseif string.match(pl, "lighton") then
       if light_enabled then
         lightset(gpio.LOW)

@@ -38,6 +38,12 @@ function lightset(i)
   end
 end
 
+function uvset(i)
+  gpio.mode(UVPIN, gpio.OUTPUT)
+  gpio.write(UVPIN, i)
+  save_state(UVPIN, i)
+end
+
 function check_hum()
   if (hum >= MAX) or (load_state(50) == 1 and hum >= MED) then
     gpio.mode(FOGPIN, gpio.OUTPUT)
@@ -75,6 +81,7 @@ end
 
 load_state(FOGPIN)
 load_state(LIGHTPIN)
+load_state(UVPIN)
 light_enabled = load_state(LIGHT_ENABLED)
 check_all()
 tmr.alarm(0, INTERVAL, 1, check_all)
