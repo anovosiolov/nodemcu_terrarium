@@ -1,3 +1,6 @@
+local ds18b20 = require('ds18b20')
+gconn = {}
+
 function get_metrics ()
   local d = ""
   -- fog
@@ -37,25 +40,39 @@ end
 -- 30s time out for a inactive client
 sv=net.createServer(net.TCP, 30)
 
+function readout(temp)
+  local buff = ""
+  buff = buff .. "HTTP/1.1 200 OK\n"
+  buff = buff .. "Content-Type:text/plain; version=0.0.4\n"
+  buff = buff .. "\n"
+  data = dofile('dht.lc')
+  for addr, temp in pairs(temp) do
+    data = data .. "# HELP dht_22_"..TEMPININ.."_temp Temperature in Terrarium\n"
+    .."# TYPE dht_22_"..TEMPININ.."_temp gauge\n"
+    .."dht_22_"..TEMPININ.."_temp{graphname=\"dht_22_"..TEMPININ.."\",instance=\"terrarium\",label=\"temp\",type=\"gauge\"} "..temp.."\n"
+  end
+  data = data .. get_metrics()
+  buff = buff .. data
+  buff = buff .. "# HELP nodemcu_heap nodeMCU heap\n"
+  .."# TYPE nodemcu_heap gauge\n"
+  .."nodemcu_heap{graphname=\"nodemcu\",instance=\"terrarium\",label=\"heap\",type=\"gauge\"} "..tostring(node.heap()).."\n"
+  .. "# HELP nodemcu_uptime nodeMCU uptime\n"
+  .. "# TYPE nodemcu_uptime counter\n"
+  .. "nodemcu_uptime{graphname=\"nodemcu\",instance=\"terrarium\",label=\"uptime\",type=\"counter\"} " .. tostring(tmr.time()) .. "\n";
+  print(buff)
+  gconn:send(buff)
+  gconn:close()
+  collectgarbage()
+end
+
 -- server listen on 80
 sv:listen(80,function(conn)
   conn:on("receive", function(client, pl)
     if string.match(pl, "metrics") then
-      -- print(pl)
-      local buff = ""
-      buff = buff .. "HTTP/1.1 200 OK\n"
-      buff = buff .. "Content-Type:text/plain; version=0.0.4\n"
-      buff = buff .. "\n"
-      data = dofile('dht.lc')
-      data = data .. get_metrics()
-      buff = buff .. data
-      buff = buff .. "# HELP nodemcu_heap nodeMCU heap\n"
-      .."# TYPE nodemcu_heap gauge\n"
-      .."nodemcu_heap{graphname=\"nodemcu\",instance=\"terrarium\",label=\"heap\",type=\"gauge\"} "..tostring(node.heap()).."\n"
-      .. "# HELP nodemcu_uptime nodeMCU uptime\n"
-      .. "# TYPE nodemcu_uptime counter\n"
-      .. "nodemcu_uptime{graphname=\"nodemcu\",instance=\"terrarium\",label=\"uptime\",type=\"counter\"} " .. tostring(tmr.time()) .. "\n";
-      client:send(buff)
+      print(pl)
+      gconn = client
+      ds18b20:readTemp(readout, TEMPININ)
+      return
     elseif string.match(pl, "fogon") then
       gpio.mode(FOGPIN, gpio.OUTPUT)
       gpio.write(FOGPIN, gpio.LOW)
