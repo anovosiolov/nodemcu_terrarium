@@ -4,17 +4,18 @@ NodeMCU controlled Terrarium
 
 ## Components
 
-*   nodemcu dev rom with DHT, net, timer... library
+*   nodemcu rom v 2.1.0 with gpio, dht, net, timer, 1-wire modules
 *   <http://prometheus.io> server for collecting metrics
 *   nodeMCU module
-*   2x DHT_22 modules
+*   1x DHT_22 module
+*   1x DS18B20 module
 *   relay module
 *   humidizer
 
 ## Example configuration
 
 DHT on pin 7 is inside, DHT on pin 6 is on outside. On pin 1 is humidizer,
-pin 2 is light control (not implemented auto switch).
+pin 2 is light control (heat) - keeps temperature between `MAXTEMP` and `MINTEMP`.
 
 Server responds on
 
