@@ -72,55 +72,56 @@ sv:listen(80,function(conn)
       print(pl)
       gconn = client
       ds18b20:readTemp(readout, TEMPININ)
-      return
-    elseif string.match(pl, "fogon") then
-      gpio.mode(FOGPIN, gpio.OUTPUT)
-      gpio.write(FOGPIN, gpio.LOW)
-      save_state(FOGPIN, gpio.LOW)
-      save_state('fog', 0)
-      print("Fog on")
-      client:send("Fog on. OK")
-    elseif string.match(pl, "fogoff") then
-      gpio.mode(FOGPIN, gpio.OUTPUT)
-      gpio.write(FOGPIN, gpio.HIGH)
-      save_state(FOGPIN, gpio.HIGH)
-      save_state('fog', 0)
-      print("Fog off")
-      client:send("Fog off. OK")
-    elseif string.match(pl, "uvon") then
-      uvset(gpio.LOW)
-      print("UV on")
-      client:send("UV on. OK")
-    elseif string.match(pl, "uvoff") then
-      uvset(gpio.HIGH)
-      print("UV off")
-      client:send("UV off. OK")
-    elseif string.match(pl, "lighton") then
-      if light_enabled then
-        lightset(gpio.LOW)
-        print("Light on")
-        client:send("Light on. OK")
-      else
-        print("Light off. Not enabled.")
-        client:send("Light on. FAILED, enable it first")
-      end
-    elseif string.match(pl, "lightoff") then
-      lightset(gpio.HIGH)
-      print("Light off")
-      client:send("Light off. OK")
-    elseif string.match(pl, "lighten") then
-      light_enabled = 1
-      print("Light enabled")
-      client:send("Light enable. OK")
-    elseif string.match(pl, "lightdis") then
-      lightset(gpio.HIGH)
-      light_enabled = 0
-      print("Light disabled")
-      client:send("Light disable. OK")
     else
-      client:send("OK")
+      if string.match(pl, "fogon") then
+        gpio.mode(FOGPIN, gpio.OUTPUT)
+        gpio.write(FOGPIN, gpio.LOW)
+        save_state(FOGPIN, gpio.LOW)
+        save_state('fog', 0)
+        print("Fog on")
+        client:send("Fog on. OK")
+      elseif string.match(pl, "fogoff") then
+        gpio.mode(FOGPIN, gpio.OUTPUT)
+        gpio.write(FOGPIN, gpio.HIGH)
+        save_state(FOGPIN, gpio.HIGH)
+        save_state('fog', 0)
+        print("Fog off")
+        client:send("Fog off. OK")
+      elseif string.match(pl, "uvon") then
+        uvset(gpio.LOW)
+        print("UV on")
+        client:send("UV on. OK")
+      elseif string.match(pl, "uvoff") then
+        uvset(gpio.HIGH)
+        print("UV off")
+        client:send("UV off. OK")
+      elseif string.match(pl, "lighton") then
+        if light_enabled then
+          lightset(gpio.LOW)
+          print("Light on")
+          client:send("Light on. OK")
+        else
+          print("Light off. Not enabled.")
+          client:send("Light on. FAILED, enable it first")
+        end
+      elseif string.match(pl, "lightoff") then
+        lightset(gpio.HIGH)
+        print("Light off")
+        client:send("Light off. OK")
+      elseif string.match(pl, "lighten") then
+        light_enabled = 1
+        print("Light enabled")
+        client:send("Light enable. OK")
+      elseif string.match(pl, "lightdis") then
+        lightset(gpio.HIGH)
+        light_enabled = 0
+        print("Light disabled")
+        client:send("Light disable. OK")
+      else
+        client:send("OK")
+      end
+      client:close()
+      collectgarbage()
     end
-    client:close()
-    collectgarbage()
    end)
 end)
